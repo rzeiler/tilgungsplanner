@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "generate-logo": "vue-asset-generate -a src/assets/logo.png -o public/icons"
+    "generate-logo": "vue-asset-generate -a src/assets/logo.png -o public/img/icons"
   },
   "dependencies": {
     "core-js": "^3.4.4",

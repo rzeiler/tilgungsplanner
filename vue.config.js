@@ -2,7 +2,7 @@ module.exports = {
   outputDir: "docs",
   publicPath: '/docs/',
   pwa: {
-    name: 'App Name',
+    name: 'Tilgungsplanner',
     theme_color: "#42b983",
     background_color: "#42b983",
     appleMobileWebAppCapable: 'yes',
