@@ -7,26 +7,53 @@
     <input type="number" v-model="zinsen" placeholder="Zinsen" />
     <input type="number" v-model="tilgung" placeholder="Tilgung" />
 
-    <div class="table">
+    <input type="number" v-model="sondertilgung" placeholder="Sondertilgung" />
+    <input type="number" v-model="sondertilgungsmonat" placeholder="Sondertilgungsmonat" />
+
+    <div class="fixed">
       <div class="table-row">
-        <div class="table-cell">datum</div>
-        <div class="table-cell">darlehen</div>
-        <div class="table-cell">zinsen</div>
-        <div class="table-cell">tilgung</div>
-        <div class="table-cell">rate</div>
+        <div class="table-cell">Gezahlt: {{gezahlt.toFixed(2)}}</div>
+        <div class="table-cell">Offen: {{offen.toFixed(2)}}</div>
+        <div class="table-cell"></div>
+        <div class="table-cell">
+          Jahre: {{
+          gesamtjahr.toFixed(1)
+          }}
+          Monate: {{
+          months.length
+          }}
+        </div>
       </div>
-      <div class="table-row" v-for="item in months" v-bind:key="item.key">
-        <div class="table-cell">{{item.datum}}</div>
-        <div class="table-cell">{{item.darlehen.toFixed(2)}} &euro;</div>
-        <div class="table-cell">{{item.zinsen.toFixed(2)}} &euro;</div>
-        <div class="table-cell">{{item.tilgung.toFixed(2)}} &euro;</div>
-        <div class="table-cell">{{item.rate.toFixed(2)}} &euro;</div>
+      <div class="table-row">
+        <div class="table-cell w50">nach 20 Jahren gezahlt: {{gezahltnach.toFixed(2)}}</div>
+        <div class="table-cell w50">noch Offen nach: {{nochoffennach.toFixed(2)}}</div>
       </div>
+      <div class="table-row border-bottom">
+        <div class="table-cell index">Monat</div>
+        <div class="table-cell darlehen">darlehen</div>
+        <div class="table-cell zinsen">zinsen</div>
+        <div class="table-cell tilgung">tilgung</div>
+        <div class="table-cell rate">rate</div>
+      </div>
+    </div>
+    <div class="table-row" :class="item.rowstyle" v-for="item in months" v-bind:key="item.key">
+      <div class="table-cell jahr w100" v-if="item.year">Jahr {{item.year}}</div>
+      <div class="table-cell key" :class="item.state">{{item.index}}</div>
+      <div class="table-cell darlehen">{{item.darlehen.toFixed(2)}} &euro;</div>
+      <div class="table-cell zinsen">{{item.zinsen.toFixed(2)}} &euro;</div>
+      <div class="table-cell tilgung">
+        {{item.tilgung.toFixed(2)}} &euro;
+        <br />
+        {{item.sondertilgung}} &euro;
+      </div>
+      <div class="table-cell rate">{{item.rate.toFixed(2)}} &euro;</div>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
+
 export default {
   name: "app",
 
@@ -39,26 +66,38 @@ export default {
       tilgung: 2.25,
       rate: 0,
       months: [],
-      datum: "2020-01-01"
+      datum: "2019-01-01",
+      gezahlt: 0,
+      offen: 0,
+      gezahltnach: 0,
+      nochoffennach: 0,
+      gesamtjahr: 0,
+      sondertilgung: 2000,
+      sondertilgungsmonat: 12,
+      keyIndex: 1
     };
   },
   methods: {
     calc: function() {
       this.months = [];
-      let index = 0;
+      let index = 1;
       let darlehen = this.darlehen;
-
+      let rowstyle = "in-range";
+      let now = new Date();
       let startdate = new Date(this.datum);
 
       do {
         let row = {};
 
         let datum = new Date(startdate);
-
-        row.key = index++;
+        row.index = index++;
+        row.key = this.keyIndex++;
         row.darlehen = darlehen;
         row.datum = `${datum.getDate()}.${datum.getMonth() +
           1}.${datum.getFullYear()}`;
+        row.state = startdate <= now ? "here" : "open";
+        row.year = null;
+        row.sondertilgung = 0;
 
         if (darlehen == this.darlehen) {
           row.zinsen = (darlehen * (this.zinsen / 100)) / 12;
@@ -71,32 +110,67 @@ export default {
           row.tilgung = row.rate - row.zinsen;
         }
 
-        darlehen = darlehen - row.tilgung;
+        if (row.index % 12 == 0) {
+          row.sondertilgung = this.sondertilgung;
+        }
+
+        darlehen = darlehen - (row.tilgung + row.sondertilgung);
         startdate.setMonth(startdate.getMonth() + 1);
+
+        if (row.state === "here") {
+          this.gezahlt = this.darlehen - darlehen;
+          this.offen = this.darlehen - this.gezahlt;
+        }
+
+        if (this.months.length % 12 == 0) {
+          row.year = this.months.length / 12 + 1;
+        }
+
+        if (row.year == 21) {
+          const lastRow = this.months[this.months.length - 1];
+          this.gezahltnach = this.darlehen - lastRow.darlehen;
+          this.nochoffennach = this.darlehen - this.gezahltnach;
+
+          rowstyle = "outer-range";
+        }
+
+        row.rowstyle = rowstyle;
 
         this.months.push(row);
       } while (darlehen > 0);
+
+      this.gesamtjahr = this.months.length / 12;
+
+      //Vue.nextTick();
+
+      this.$nextTick();
     }
   },
   watch: {
     // whenever question changes, this function will run
-    kaufpreis: function(newValue, oldValue) {
-      console.log(newValue, oldValue);
+    kaufpreis: function() {
+      this.calc();
     },
-    eigenkapital: function(newValue, oldValue) {
-      console.log(newValue, oldValue);
+    eigenkapital: function() {
+      this.calc();
     },
-    darlehen: function(newValue, oldValue) {
-      console.log(newValue, oldValue);
+    darlehen: function() {
+      this.calc();
     },
-    zinsen: function(newValue, oldValue) {
-      console.log(newValue, oldValue);
+    zinsen: function() {
+      this.calc();
     },
-    tilgung: function(newValue, oldValue) {
-      console.log(newValue, oldValue);
+    tilgung: function() {
+      this.calc();
     },
-    datum: function(newValue, oldValue) {
-      console.log(newValue, oldValue);
+    datum: function() {
+      this.calc();
+    },
+    sondertilgung: function() {
+      this.calc();
+    },
+    sondertilgungsmonat: function() {
+      this.calc();
     }
   },
   created: function() {
@@ -112,20 +186,86 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
-.table {
+.table-row {
   width: 100%;
   max-width: 600px;
   margin: auto;
-  height: calc(100% - 66px);
-  display: table;
+
+  display: flex;
+  flex-wrap: wrap;
 }
-.table-row {
-  display: table-row;
+.fixed {
+  position: sticky;
+  top: 0;
 }
+.fixed .table-cell {
+  background-color: #bcd4c7;
+  border-color: #87cfa5;
+}
+
+.border-bottom {
+  border-bottom: 5px solid #9b9b9b;
+}
+
 .table-cell {
-  display: table-cell;
+  border: 1px solid #e0e0e0;
+  padding: 5px;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 20%;
+  flex: 1;
+}
+
+.table-cell.w50 {
+  width: 50%;
+}
+
+.table-cell.w16 {
+  width: 16.667%;
+}
+.w100 {
+  flex: 100%;
+}
+
+.outer-range {
+  color: #a3a3a3;
+}
+
+.key {
+  flex: 0 7%;
+  text-align: center;
+}
+.jahr {
+  background-color: #c8c8c8;
+  border-color: #adacac;
+}
+.datum {
+  text-align: right;
+}
+.darlehen {
+  flex: 0 25%;
+  text-align: right;
+}
+.zinsen {
+  text-align: right;
+}
+.tilgung {
+  text-align: right;
+}
+.rate {
+  text-align: right;
+}
+
+.here {
+  border-color: #ff4f4f;
+  background-color: #fb7575;
+  color: #ffffff;
+}
+
+.open {
+  border-color: #a3a3a3;
+  background-color: #c5c5c5;
 }
 </style>
