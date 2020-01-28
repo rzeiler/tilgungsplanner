@@ -1,14 +1,61 @@
 <template>
   <div id="app">
-    <input type="number" v-model="kaufpreis" placeholder="Kaufpreis" />
-    <input type="number" v-model="eigenkapital" placeholder="Eigenkapital" />
-    <input type="date" v-model="datum" placeholder="Start Datum" />
-    <input type="number" v-model="darlehen" placeholder="Darlehen" />
-    <input type="number" v-model="zinsen" placeholder="Zinsen" />
-    <input type="number" v-model="tilgung" placeholder="Tilgung" />
-
-    <input type="number" v-model="sondertilgung" placeholder="Sondertilgung" />
-    <input type="number" v-model="sondertilgungsmonat" placeholder="Sondertilgungsmonat" />
+    <div class="table-row dark">
+      <div class="table-cell">
+        <label>
+          <span>Kaufpreis</span>
+          <input type="number" v-model="kaufpreis" placeholder="Kaufpreis" />
+        </label>
+      </div>
+      <div class="table-cell">
+        <label>
+          <span>Eigenkapital</span>
+          <input type="number" v-model="eigenkapital" placeholder="Eigenkapital" />
+        </label>
+      </div>
+    </div>
+    <div class="table-row dark">
+      <div class="table-cell">
+        <label>
+          <span>Start Datum</span>
+          <input type="date" v-model="datum" placeholder="Start Datum" />
+        </label>
+      </div>
+      <div class="table-cell">
+        <label>
+          <span>Darlehen</span>
+          <input type="number" v-model="darlehen" placeholder="Darlehen" />
+        </label>
+      </div>
+    </div>
+    <div class="table-row dark">
+      <div class="table-cell">
+        <label>
+          <span>Zinsen</span>
+          <input type="number" v-model="zinsen" placeholder="Zinsen" />
+        </label>
+      </div>
+      <div class="table-cell">
+        <label>
+          <span>Tilgung</span>
+          <input type="number" v-model="tilgung" placeholder="Tilgung" />
+        </label>
+      </div>
+    </div>
+    <div class="table-row dark">
+      <div class="table-cell">
+        <label>
+          <span>Sondertilgung</span>
+          <input type="number" v-model="sondertilgung" placeholder="Sondertilgung" />
+        </label>
+      </div>
+      <div class="table-cell">
+        <label>
+          <span>Sondertilgungsmonat</span>
+          <input type="number" v-model="sondertilgungsmonat" placeholder="Sondertilgungsmonat" />
+        </label>
+      </div>
+    </div>
 
     <div class="fixed">
       <div class="table-row">
@@ -43,8 +90,7 @@
       <div class="table-cell zinsen">{{item.zinsen.toFixed(2)}} &euro;</div>
       <div class="table-cell tilgung">
         {{item.tilgung.toFixed(2)}} &euro;
-        <br />
-        {{item.sondertilgung}} &euro;
+        <b v-if="item.sondertilgung">*{{item.sondertilgung}} &euro;</b>
       </div>
       <div class="table-cell rate">{{item.rate.toFixed(2)}} &euro;</div>
     </div>
@@ -52,8 +98,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
-
 export default {
   name: "app",
 
@@ -81,7 +125,7 @@ export default {
     calc: function() {
       this.months = [];
       let index = 1;
-      let darlehen = this.darlehen;
+      let darlehen = parseFloat(this.darlehen);
       let rowstyle = "in-range";
       let now = new Date();
       let startdate = new Date(this.datum);
@@ -99,27 +143,27 @@ export default {
         row.year = null;
         row.sondertilgung = 0;
 
-        if (darlehen == this.darlehen) {
-          row.zinsen = (darlehen * (this.zinsen / 100)) / 12;
-          row.tilgung = (darlehen * (this.tilgung / 100)) / 12;
+        if (darlehen == parseFloat(this.darlehen)) {
+          row.zinsen = (darlehen * (parseFloat(this.zinsen) / 100)) / 12;
+          row.tilgung = (darlehen * (parseFloat(this.tilgung) / 100)) / 12;
           row.rate = row.zinsen + row.tilgung;
         } else {
           const lastRow = this.months[this.months.length - 1];
-          row.zinsen = (darlehen * (this.zinsen / 100)) / 12;
+          row.zinsen = (darlehen * (parseFloat(this.zinsen) / 100)) / 12;
           row.rate = lastRow.rate;
           row.tilgung = row.rate - row.zinsen;
         }
 
         if (row.index % 12 == 0) {
-          row.sondertilgung = this.sondertilgung;
+          row.sondertilgung = parseFloat(this.sondertilgung);
         }
 
         darlehen = darlehen - (row.tilgung + row.sondertilgung);
         startdate.setMonth(startdate.getMonth() + 1);
 
         if (row.state === "here") {
-          this.gezahlt = this.darlehen - darlehen;
-          this.offen = this.darlehen - this.gezahlt;
+          this.gezahlt = parseFloat(this.darlehen) - darlehen;
+          this.offen = parseFloat(this.darlehen) - this.gezahlt;
         }
 
         if (this.months.length % 12 == 0) {
@@ -128,8 +172,8 @@ export default {
 
         if (row.year == 21) {
           const lastRow = this.months[this.months.length - 1];
-          this.gezahltnach = this.darlehen - lastRow.darlehen;
-          this.nochoffennach = this.darlehen - this.gezahltnach;
+          this.gezahltnach = parseFloat(this.darlehen) - lastRow.darlehen;
+          this.nochoffennach = parseFloat(this.darlehen) - this.gezahltnach;
 
           rowstyle = "outer-range";
         }
@@ -140,10 +184,6 @@ export default {
       } while (darlehen > 0);
 
       this.gesamtjahr = this.months.length / 12;
-
-      //Vue.nextTick();
-
-      this.$nextTick();
     }
   },
   watch: {
@@ -188,6 +228,16 @@ export default {
   color: #2c3e50;
 }
 
+label {
+  display: flex;
+}
+label * {
+  overflow: hidden;
+  width: 50%;
+  flex: 1;
+  text-align: left;
+}
+
 .table-row {
   width: 100%;
   max-width: 600px;
@@ -210,12 +260,26 @@ export default {
 }
 
 .table-cell {
+   
   border: 1px solid #e0e0e0;
   padding: 5px;
   background-color: #ffffff;
   overflow: hidden;
   width: 20%;
   flex: 1;
+}
+
+.table-row.dark .table-cell {
+  line-height: 2;
+  background-color: #323232;
+  color: #e0e0e0;
+  border: 1px solid #202020;
+}
+.table-row.dark .table-cell input {
+  background-color: #555454;
+  color: #e0e0e0;
+  border: 1px solid #000000;
+   padding-left: 5px;
 }
 
 .table-cell.w50 {
@@ -253,6 +317,9 @@ export default {
 }
 .tilgung {
   text-align: right;
+}
+.tilgung b{
+  white-space: nowrap;
 }
 .rate {
   text-align: right;
