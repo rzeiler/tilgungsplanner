@@ -8,7 +8,7 @@ module.exports = {
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
     // configure the workbox plugin
-    
+    manifestPath: "public/manifest.json"
 
   }
 

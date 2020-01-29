@@ -49,12 +49,6 @@
           <input type="number" v-model="sondertilgung" placeholder="Sondertilgung" />
         </label>
       </div>
-      <div class="table-cell">
-        <label>
-          <span>Sondertilgungsmonat</span>
-          <input type="number" v-model="sondertilgungsmonat" placeholder="Sondertilgungsmonat" />
-        </label>
-      </div>
     </div>
 
     <div class="fixed">
@@ -76,7 +70,7 @@
         <div class="table-cell w50">noch Offen nach: {{nochoffennach.toFixed(2)}}</div>
       </div>
       <div class="table-row border-bottom">
-        <div class="table-cell index">Monat</div>
+        <div class="table-cell key">Monat</div>
         <div class="table-cell darlehen">darlehen</div>
         <div class="table-cell zinsen">zinsen</div>
         <div class="table-cell tilgung">tilgung</div>
@@ -87,12 +81,24 @@
       <div class="table-cell jahr w100" v-if="item.year">Jahr {{item.year}}</div>
       <div class="table-cell key" :class="item.state">{{item.index}}</div>
       <div class="table-cell darlehen">{{item.darlehen.toFixed(2)}} &euro;</div>
-      <div class="table-cell zinsen">{{item.zinsen.toFixed(2)}} &euro;</div>
-      <div class="table-cell tilgung">
+      <div
+        class="table-cell zinsen"
+        v-on:click="sum(item.index,'zinsen')"
+      >{{item.zinsen.toFixed(2)}} &euro;</div>
+      <div class="table-cell tilgung" v-on:click="sum(item.index,'tilgung')">
         {{item.tilgung.toFixed(2)}} &euro;
-        <b v-if="item.sondertilgung">*{{item.sondertilgung}} &euro;</b>
+        <b
+          v-if="item.sondertilgung"
+        >*{{item.sondertilgung}} &euro;</b>
       </div>
-      <div class="table-cell rate">{{item.rate.toFixed(2)}} &euro;</div>
+      <div
+        class="table-cell rate"
+        v-on:click="sum(item.index,'rate')"
+      >{{item.rate.toFixed(2)}} &euro;</div>
+    </div>
+
+    <div v-if="showSum" class="dialog" v-on:click="showSum=0">
+      <div>{{showSum.toFixed(2)}} &euro;</div>
     </div>
   </div>
 </template>
@@ -117,11 +123,21 @@ export default {
       nochoffennach: 0,
       gesamtjahr: 0,
       sondertilgung: 2000,
-      sondertilgungsmonat: 12,
-      keyIndex: 1
+      keyIndex: 1,
+      showSum: null
     };
   },
   methods: {
+    sum: function(index, attribute) {
+      let _sum = 0;
+      this.months.map(function(value) {
+        if (parseInt(index) >= parseInt(value["index"])) {
+          _sum += value[attribute];
+        }
+      });
+      this.showSum = _sum;
+    },
+
     calc: function() {
       this.months = [];
       let index = 1;
@@ -260,7 +276,6 @@ label * {
 }
 
 .table-cell {
-   
   border: 1px solid #e0e0e0;
   padding: 5px;
   background-color: #ffffff;
@@ -279,7 +294,7 @@ label * {
   background-color: #555454;
   color: #e0e0e0;
   border: 1px solid #000000;
-   padding-left: 5px;
+  padding-left: 5px;
 }
 
 .table-cell.w50 {
@@ -318,7 +333,7 @@ label * {
 .tilgung {
   text-align: right;
 }
-.tilgung b{
+.tilgung b {
   white-space: nowrap;
 }
 .rate {
@@ -334,5 +349,20 @@ label * {
 .open {
   border-color: #a3a3a3;
   background-color: #c5c5c5;
+}
+.dialog {
+  position: sticky;
+
+  bottom: 0;
+  height: 100%;
+  background-color: #33333355;
+}
+.dialog div {
+  background-color: #a3a3a3;
+  width: 300px;
+  height: 100px;
+  margin: auto;
+  font-size: 50px;
+  line-height: 100px;
 }
 </style>
