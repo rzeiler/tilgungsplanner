@@ -1,6 +1,6 @@
 module.exports = {
   outputDir: "docs",
-  publicPath: '/docs/',
+  publicPath: '/tilgungsplanner/',
   pwa: {
     name: 'Tilgungsplanner',
     theme_color: "#42b983",
