@@ -109,24 +109,36 @@ export default {
 
   data: function() {
     return {
-      kaufpreis: 340000,
-      eigenkapital: 62000,
-      darlehen: 334000,
-      zinsen: 1.65,
-      tilgung: 2.25,
+      kaufpreis: 500000,
+      eigenkapital: 10000,
+      darlehen: 500000,
+      zinsen: 2,
+      tilgung: 2,
       rate: 0,
       months: [],
-      datum: "2019-01-01",
+      datum: "2020-01-01",
       gezahlt: 0,
       offen: 0,
       gezahltnach: 0,
       nochoffennach: 0,
       gesamtjahr: 0,
-      sondertilgung: 2000,
+      sondertilgung: 0,
       keyIndex: 1,
       showSum: null
     };
   },
+  mounted() {
+    if (localStorage.kaufpreis) this.kaufpreis = localStorage.kaufpreis;
+    if (localStorage.darlehen) this.darlehen = localStorage.darlehen;
+    if (localStorage.eigenkapital)
+      this.eigenkapital = localStorage.eigenkapital;
+    if (localStorage.zinsen) this.zinsen = localStorage.zinsen;
+    if (localStorage.tilgung) this.tilgung = localStorage.tilgung;
+    if (localStorage.sondertilgung)
+      this.sondertilgung = localStorage.sondertilgung;
+    if (localStorage.datum) this.datum = localStorage.datum;
+  },
+
   methods: {
     sum: function(index, attribute) {
       let _sum = 0;
@@ -204,28 +216,32 @@ export default {
   },
   watch: {
     // whenever question changes, this function will run
-    kaufpreis: function() {
+    kaufpreis: function(newValue) {
+      localStorage.kaufpreis = newValue;
       this.calc();
     },
-    eigenkapital: function() {
+    eigenkapital: function(newValue) {
+      localStorage.eigenkapital = newValue;
       this.calc();
     },
-    darlehen: function() {
+    darlehen: function(newValue) {
+      localStorage.darlehen = newValue;
       this.calc();
     },
-    zinsen: function() {
+    zinsen: function(newValue) {
+      localStorage.zinsen = newValue;
       this.calc();
     },
-    tilgung: function() {
+    tilgung: function(newValue) {
+      localStorage.tilgung = newValue;
       this.calc();
     },
-    datum: function() {
+    datum: function(newValue) {
+      localStorage.datum = newValue;
       this.calc();
     },
-    sondertilgung: function() {
-      this.calc();
-    },
-    sondertilgungsmonat: function() {
+    sondertilgung: function(newValue) {
+      localStorage.sondertilgung = newValue;
       this.calc();
     }
   },
