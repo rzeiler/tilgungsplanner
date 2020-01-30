@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+    <div class="fixed">
+      <h1>{{offen.toFixed(2)}}</h1>
+    </div>
+
     <div class="table-row dark">
       <div class="table-cell">
         <label>
@@ -77,6 +81,29 @@
         <div class="table-cell rate">rate</div>
       </div>
     </div>
+
+    <hr />
+
+    <svg height="200px" widht="200px"   version="1.1" id="svg8" viewBox="0 0 200 200">
+      <path
+        style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+        :d="graph.darlehen"
+        id="darlehen"
+      />
+      <path
+        style="fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+        :d="graph.zinsen"
+        id="zinsen"
+      />
+      <path
+        style="fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+        :d="graph.tilgung"
+        id="tilgung"
+      />
+    </svg>
+
+    <hr />
+
     <div class="table-row" :class="item.rowstyle" v-for="item in months" v-bind:key="item.key">
       <div class="table-cell jahr w100" v-if="item.year">Jahr {{item.year}}</div>
       <div class="table-cell key" :class="item.state">{{item.index}}</div>
@@ -109,6 +136,12 @@ export default {
 
   data: function() {
     return {
+      graph: {
+        darlehen: "m 0,2 2,2 2,-4 2,+2 2,0 2,2",
+        zinsen: "m 0,4 2,2 2,-4 2,+2 2,0 2,2",
+        tilgung: "m 0,10 2,2 2,-4 2,+2 2,0 2,2",
+        viewBox: "0 0 100 100"
+      },
       kaufpreis: 500000,
       eigenkapital: 10000,
       darlehen: 500000,
@@ -137,9 +170,16 @@ export default {
     if (localStorage.sondertilgung)
       this.sondertilgung = localStorage.sondertilgung;
     if (localStorage.datum) this.datum = localStorage.datum;
+
+    window.addEventListener("resize", this.getWindowWidth);
   },
 
   methods: {
+    getWindowWidth: function(w) {
+      console.log(w.target.innerWidth);
+      this.graph.width = w.target.innerWidth;
+    },
+
     sum: function(index, attribute) {
       let _sum = 0;
       this.months.map(function(value) {
@@ -157,6 +197,8 @@ export default {
       let rowstyle = "in-range";
       let now = new Date();
       let startdate = new Date(this.datum);
+
+      let darlehenPath = "m";
 
       do {
         let row = {};
@@ -211,6 +253,19 @@ export default {
         this.months.push(row);
       } while (darlehen > 0);
 
+      this.graph.viewBox = `0 0 ${this.darlehen} 10`;
+
+      let lastX = 0;
+      this.months.splice(0, 200).map((month, index) => {
+    
+        let a = lastX - (this.darlehen - month["darlehen"]) ;
+
+
+        darlehenPath += ` ${index},${a}  `;
+        lastX = a;
+      });
+      this.graph.darlehen = darlehenPath;
+
       this.gesamtjahr = this.months.length / 12;
     }
   },
@@ -252,6 +307,18 @@ export default {
 </script>
 
 <style>
+html,
+body {
+  background-color: #282c34;
+}
+
+ 
+
+.funnel.svg-funnel-js {
+  width: 100%;
+  overflow: hidden;
+}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
