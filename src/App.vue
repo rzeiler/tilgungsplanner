@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <div class="fixed">
-      <h1>{{offen.toFixed(2)}}</h1>
-    </div>
-
     <div class="table-row dark">
       <div class="table-cell">
         <label>
@@ -57,8 +53,8 @@
 
     <div class="fixed">
       <div class="table-row">
-        <div class="table-cell">Gezahlt: {{gezahlt.toFixed(2)}}</div>
-        <div class="table-cell">Offen: {{offen.toFixed(2)}}</div>
+        <div class="table-cell">Gezahlt: {{formatCurrency(gezahlt)}}</div>
+        <div class="table-cell">Offen: {{formatCurrency(offen)}}</div>
         <div class="table-cell"></div>
         <div class="table-cell">
           Jahre: {{
@@ -70,62 +66,37 @@
         </div>
       </div>
       <div class="table-row">
-        <div class="table-cell w50">nach 20 Jahren gezahlt: {{gezahltnach.toFixed(2)}}</div>
-        <div class="table-cell w50">noch Offen nach: {{nochoffennach.toFixed(2)}}</div>
+        <div class="table-cell w50">nach 20 Jahren gezahlt: {{formatCurrency(gezahltnach)}}</div>
+        <div class="table-cell w50">noch Offen nach: {{formatCurrency(nochoffennach)}}</div>
       </div>
       <div class="table-row border-bottom">
         <div class="table-cell key">Monat</div>
-        <div class="table-cell darlehen">darlehen</div>
-        <div class="table-cell zinsen">zinsen</div>
-        <div class="table-cell tilgung">tilgung</div>
-        <div class="table-cell rate">rate</div>
+        <div class="table-cell darlehen">Darlehen</div>
+        <div class="table-cell zinsen">Zinsen</div>
+        <div class="table-cell tilgung">Tilgung</div>
+        <div class="table-cell rate">Rate</div>
       </div>
     </div>
-
-    <hr />
-
-    <svg height="200px" widht="200px"   version="1.1" id="svg8" viewBox="0 0 200 200">
-      <path
-        style="fill:none;stroke:#ffffff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-        :d="graph.darlehen"
-        id="darlehen"
-      />
-      <path
-        style="fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-        :d="graph.zinsen"
-        id="zinsen"
-      />
-      <path
-        style="fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-        :d="graph.tilgung"
-        id="tilgung"
-      />
-    </svg>
-
-    <hr />
 
     <div class="table-row" :class="item.rowstyle" v-for="item in months" v-bind:key="item.key">
       <div class="table-cell jahr w100" v-if="item.year">Jahr {{item.year}}</div>
       <div class="table-cell key" :class="item.state">{{item.index}}</div>
-      <div class="table-cell darlehen">{{item.darlehen.toFixed(2)}} &euro;</div>
+      <div class="table-cell darlehen">{{formatCurrency(item.darlehen)}}</div>
       <div
         class="table-cell zinsen"
         v-on:click="sum(item.index,'zinsen')"
-      >{{item.zinsen.toFixed(2)}} &euro;</div>
+      >{{formatCurrency(item.zinsen)}}</div>
       <div class="table-cell tilgung" v-on:click="sum(item.index,'tilgung')">
-        {{item.tilgung.toFixed(2)}} &euro;
+        {{formatCurrency(item.tilgung)}}
         <b
           v-if="item.sondertilgung"
-        >*{{item.sondertilgung}} &euro;</b>
+        >*{{formatCurrency(item.sondertilgung)}}</b>
       </div>
-      <div
-        class="table-cell rate"
-        v-on:click="sum(item.index,'rate')"
-      >{{item.rate.toFixed(2)}} &euro;</div>
+      <div class="table-cell rate" v-on:click="sum(item.index,'rate')">{{formatCurrency(item.rate)}}</div>
     </div>
 
     <div v-if="showSum" class="dialog" v-on:click="showSum=0">
-      <div>{{showSum.toFixed(2)}} &euro;</div>
+      <div>{{formatCurrency(showSum)}}</div>
     </div>
   </div>
 </template>
@@ -136,12 +107,6 @@ export default {
 
   data: function() {
     return {
-      graph: {
-        darlehen: "m 0,2 2,2 2,-4 2,+2 2,0 2,2",
-        zinsen: "m 0,4 2,2 2,-4 2,+2 2,0 2,2",
-        tilgung: "m 0,10 2,2 2,-4 2,+2 2,0 2,2",
-        viewBox: "0 0 100 100"
-      },
       kaufpreis: 500000,
       eigenkapital: 10000,
       darlehen: 500000,
@@ -175,9 +140,8 @@ export default {
   },
 
   methods: {
-    getWindowWidth: function(w) {
-      console.log(w.target.innerWidth);
-      this.graph.width = w.target.innerWidth;
+    formatCurrency(a) {
+      return a.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
     },
 
     sum: function(index, attribute) {
@@ -197,8 +161,6 @@ export default {
       let rowstyle = "in-range";
       let now = new Date();
       let startdate = new Date(this.datum);
-
-      let darlehenPath = "m";
 
       do {
         let row = {};
@@ -253,19 +215,6 @@ export default {
         this.months.push(row);
       } while (darlehen > 0);
 
-      this.graph.viewBox = `0 0 ${this.darlehen} 10`;
-
-      let lastX = 0;
-      this.months.splice(0, 200).map((month, index) => {
-    
-        let a = lastX - (this.darlehen - month["darlehen"]) ;
-
-
-        darlehenPath += ` ${index},${a}  `;
-        lastX = a;
-      });
-      this.graph.darlehen = darlehenPath;
-
       this.gesamtjahr = this.months.length / 12;
     }
   },
@@ -311,8 +260,6 @@ html,
 body {
   background-color: #282c34;
 }
-
- 
 
 .funnel.svg-funnel-js {
   width: 100%;
