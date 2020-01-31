@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/tilgungsplanner/precache-manifest.f05f56d8b5639541ca6759b59e57f678.js"
+  "/tilgungsplanner/precache-manifest.586faaa8f92955ad22badd1c7f217cbc.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "appname"});

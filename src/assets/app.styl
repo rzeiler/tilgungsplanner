@@ -1,0 +1,132 @@
+
+$grey-light = #dbdbde
+$accent = #2a2a9a
+$warn = #FB0105
+
+html,
+body 
+  background-color $grey-light
+  font-family monospace
+  font-size 18px
+  margin 0
+  padding 0
+
+*
+  z-index 1
+
+.p-1
+  padding: 20px
+
+.bg-grey-deep-dark
+  background-color #011224
+  color #ffffff
+
+.bg-grey-dark
+  background-color #CDD2D8
+  color #ffffff
+
+.bg-white
+  background-color #FFFFFF
+  color #353535
+
+.bg-blue
+    background-color #5770ED
+    color #ffffff
+
+.bg-grey-light
+  background-color $grey-light
+
+.rounded
+  border-radius 20px
+
+.shadow
+  box-shadow 0 1rem 3rem rgba(0,0,0,.2)
+
+.small
+small 
+  font-size 70%
+  opacity .8
+
+#app
+  color #7F8187
+  width 100%
+  max-width 600px
+  margin auto
+
+.table-row
+    width 100%
+    margin auto
+    display flex
+    flex-wrap wrap
+    .table-cell
+        flex 1
+        h3
+            font-size 90%
+        h6
+          font-size 60%  
+        &.w-auto
+            flex 0 auto
+
+    &.b-t-b
+        border-top 1px solid $grey-light
+        border-bottom 1px solid $grey-light
+
+.m-3
+    margin-top 20px
+    margin-bottom 20px
+
+.fab
+    width 60px
+    height 60px
+    border-radius 50%
+    text-align center
+    display block
+    line-height 60px
+    font-size 180%
+    font-weight bolder
+
+
+.accent
+    background-color $accent 
+    color #ffffff
+
+.warn
+    background-color $warn 
+    color #ffffff
+
+.text-justify
+    text-align justify
+
+.text-right
+    text-align right
+.text-center
+    text-align center
+
+.pull-right
+    float right
+
+.sticky
+  position sticky
+  top 40px
+  z-index 2
+  &.head
+    margin-bottom -60px
+  &.bottom
+    bottom 100px
+
+p
+  font-size 100%
+h6
+  font-size 110%
+h5
+  font-size 120%
+h4
+  font-size 130%
+h3
+  font-size 150%
+h2
+  font-size 170%
+h1
+  font-size 200%
+
+

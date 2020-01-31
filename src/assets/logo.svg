@@ -31,30 +31,13 @@
          id="stop827" />
     </linearGradient>
     <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1100"
-       x="-0.12989585"
-       width="1.2597917"
-       y="-0.13171683"
-       height="1.2634337">
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Blur"
+       id="filter1044">
       <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="3.1390137"
-         id="feGaussianBlur1102" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1100-3"
-       x="-0.12989585"
-       width="1.2597917"
-       y="-0.13171683"
-       height="1.2634337">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="3.1390137"
-         id="feGaussianBlur1102-7" />
+         stdDeviation="6.26 6.51977"
+         result="blur"
+         id="feGaussianBlur1042" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -64,9 +47,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="120.79387"
-     inkscape:cy="251.50572"
+     inkscape:zoom="1.979899"
+     inkscape:cx="262.59511"
+     inkscape:cy="268.19147"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -84,7 +67,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -94,28 +77,42 @@
      id="layer1"
      transform="translate(0,-161.53338)">
     <rect
-       style="fill:#33c481;fill-opacity:1;stroke:none;stroke-width:0.08731457;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       style="fill:#dbdbde;fill-opacity:1;stroke:none;stroke-width:0.05046333;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect815"
-       width="134.2972"
-       height="133.09482"
-       x="0.63899386"
-       y="163.19917"
-       ry="10.535968" />
+       width="69.591805"
+       height="85.79232"
+       x="23.959551"
+       y="186.74507"
+       ry="6.7914376" />
     <rect
-       style="fill:#21a366;fill-opacity:1;stroke:none;stroke-width:0.08177243;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="rect817"
-       width="134.26128"
-       height="88.299187"
-       x="0.67818975"
-       y="197.93607"
-       ry="10.234835" />
-    <rect
-       style="fill:#107c41;fill-opacity:1;stroke:none;stroke-width:0.08803692;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       style="fill:#688eff;fill-opacity:1;stroke:none;stroke-width:0.04302311;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect821"
-       width="134.26801"
-       height="54.084187"
-       x="0.66817272"
-       y="242.20979"
-       ry="10.426557" />
+       width="78.918976"
+       height="21.975321"
+       x="19.173199"
+       y="199.94061"
+       ry="2.191855" />
+    <rect
+       style="fill:#688eff;fill-opacity:1;stroke:none;stroke-width:0.01326547;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect821-8"
+       width="57.537415"
+       height="2.8655484"
+       x="28.1597"
+       y="231.35577"
+       ry="0.55243146" />
+    <rect
+       style="fill:#688eff;fill-opacity:1;stroke:none;stroke-width:0.01051567;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect821-8-1"
+       width="36.155853"
+       height="2.8655486"
+       x="28.426971"
+       y="238.90614"
+       ry="0.55243146" />
+    <circle
+       style="opacity:1;fill:#011224;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.00019729;paint-order:markers stroke fill"
+       id="path45"
+       cx="90.003014"
+       cy="268.60266"
+       r="10.490329" />
   </g>
 </svg>
