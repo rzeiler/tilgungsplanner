@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="p-1">
+  <div>
     <div class="bg-grey-deep-dark rounded shadow sticky head">
       <div class="p-1">
         <br />
@@ -14,7 +14,7 @@
         <br />
       </div>
     </div>
-    <div class="p-1">
+    <div class="p-1 not-mobile">
       <div class="bg-white rounded shadow">
         <br />
         <br />
