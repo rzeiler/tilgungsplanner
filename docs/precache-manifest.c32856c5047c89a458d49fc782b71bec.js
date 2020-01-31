@@ -1,14 +1,14 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "17f70034183c6348b879",
-    "url": "/tilgungsplanner/css/app.37cc6eeb.css"
+    "revision": "a03435375e0f0af66f61",
+    "url": "/tilgungsplanner/css/app.33fdbbc6.css"
   },
   {
     "revision": "39520efe06ab5b25bd3f489512d47767",
     "url": "/tilgungsplanner/css/normalize.css"
   },
   {
-    "revision": "ff11dacc8bcd7c67271dc833d2d4b08b",
+    "revision": "e6534da24d741167ead78d46683c2ceb",
     "url": "/tilgungsplanner/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tilgungsplanner/js/about.a3435d4d.js"
   },
   {
-    "revision": "17f70034183c6348b879",
-    "url": "/tilgungsplanner/js/app.5efef272.js"
+    "revision": "a03435375e0f0af66f61",
+    "url": "/tilgungsplanner/js/app.22beb130.js"
   },
   {
     "revision": "ce2bd8a9d7bd10e61795",
