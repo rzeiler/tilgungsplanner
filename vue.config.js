@@ -3,9 +3,9 @@ module.exports = {
   publicPath: '/tilgungsplanner/',
   pwa: {
     name: 'Tilgungsplanner',
-    theme_color: "#dbdbde",
-    background_color: "#dbdbde",
+    themeColor: '#dbdbde',
+    backgroundBolor: '#dbdbde',
     appleMobileWebAppCapable: 'yes',
-    appleMobileWebAppStatusBarStyle: 'white',
+    appleMobileWebAppStatusBarStyle: 'white'
   }
 };

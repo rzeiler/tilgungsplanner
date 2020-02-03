@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tilgungsplanner/css/normalize.css"
   },
   {
-    "revision": "563aa528eecc5fc8eb16262fdb85109c",
+    "revision": "a6e32649575c1b94902cfc85d9bc00dd",
     "url": "/tilgungsplanner/index.html"
   },
   {
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tilgungsplanner/js/chunk-vendors.e6c8bcdd.js"
   },
   {
-    "revision": "688d35546f7c39c50cba5876d0b35bd5",
+    "revision": "a0dd73ae2f87cf010ea838400c696b87",
     "url": "/tilgungsplanner/manifest.json"
   },
   {
