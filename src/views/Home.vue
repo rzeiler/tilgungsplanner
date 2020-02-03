@@ -29,21 +29,14 @@
           </h3>
           <br />
           <h6>Gesamtlaufzeit {{credit.yearCount}} Jahre</h6>
-          <div class="table-row b-t-b m-3">
-            <div class="table-cell p-1">
-              <h3>Monate</h3>
-              <h6>{{credit.range.count}}</h6>
-            </div>
-            <div class="table-cell p-1">
-              <h3>Rate</h3>
-              <h6>{{formatCurrency(credit.rate)}}</h6>
-            </div>
-            <div class="table-cell p-1">
-              <h3>Restschuld</h3>
-              <h6>{{formatCurrency(credit.range.open)}}</h6>
-            </div>
-          </div>
-
+          <tablerow
+            cssClass="b-t-b m-3"
+            :items="[
+{titel:'Monat',value: credit.range.count},
+{titel:'Rate',value: formatCurrency(credit.rate)},
+{titel:'Restschuld',value: formatCurrency(credit.range.open)}
+]"
+          ></tablerow>
           <div class="rounded bg-grey-light m-3 shadow">
             <div class="table-row">
               <div class="table-cell p-1 w-auto">
@@ -54,25 +47,17 @@
                 <h3>Gesamtausgaben: {{formatCurrency(credit.range.rate)}}</h3>
               </div>
             </div>
-            <div class="table-row">
-              <div class="table-cell p-1">
-                <h3>Zinsen</h3>
-                <h6>{{formatCurrency(credit.range.zinsen)}}</h6>
-              </div>
-              <div class="table-cell p-1">
-                <h3>Tilgung</h3>
-                <h6>{{formatCurrency(credit.range.tilgung)}}</h6>
-              </div>
-              <div class="table-cell p-1">
-                <h3>Raten</h3>
-                <h6>{{formatCurrency(credit.range.rate)}}</h6>
-              </div>
-            </div>
+            <tablerow
+              :items="[
+{titel:'Zinsen',value: formatCurrency(credit.range.zinsen)},
+{titel:'Tilgung',value: formatCurrency(credit.range.tilgung)},
+{titel:'Raten',value: formatCurrency(credit.range.rate)}
+]"
+            ></tablerow>
           </div>
         </div>
       </div>
       <br />
-
       <svg
         viewBox="0 0 120 120"
         width="100%"
@@ -104,24 +89,15 @@
           />
         </g>
       </svg>
-
-      <div class="table-row text-center">
-        <div class="table-cell p-1">
-          <h3 :style="{color:this.grapth.c.color}">Zinsen</h3>
-          <h6>{{formatCurrency(this.grapth.c.from)}} / {{formatCurrency(this.grapth.c.to)}}</h6>
-        </div>
-        <div class="table-cell p-1">
-          <h3 :style="{color:this.grapth.b.color}">Tilgung</h3>
-          <h6>{{formatCurrency(this.grapth.b.from)}} / {{formatCurrency(this.grapth.b.to)}}</h6>
-        </div>
-        <div class="table-cell p-1">
-          <h3 :style="{color:this.grapth.a.color}">Darlehen</h3>
-          <h6>{{formatCurrency(this.grapth.a.from)}} / {{formatCurrency(this.grapth.a.to)}}</h6>
-        </div>
-      </div>
-
+      <tablerow
+        cssClass="text-center"
+        :items="[
+{titel:'Zinsen',value: formatCurrency(this.grapth.c.from) + '/' + formatCurrency(this.grapth.c.to), color:this.grapth.c.color },
+{titel:'Tilgung',value: formatCurrency(this.grapth.b.from) + '/' + formatCurrency(this.grapth.b.to), color:this.grapth.b.color },
+{titel:'Darlehen',value:formatCurrency(this.grapth.a.from) + '/' + formatCurrency(this.grapth.a.to), color:this.grapth.a.color }
+]"
+      ></tablerow>
       <br />
-
       <div class="bg-blue rounded shadow">
         <div class="p-1">
           <div class="table-row">
@@ -133,24 +109,16 @@
               <h3>Gesamtausgaben: {{formatCurrency(credit.rangeComplete.rate)}}</h3>
             </div>
           </div>
-          <div class="table-row">
-            <div class="table-cell p-1">
-              <h3>Zinsen</h3>
-              <h6>{{formatCurrency(credit.rangeComplete.zinsen)}}</h6>
-            </div>
-            <div class="table-cell p-1">
-              <h3>Tilgung</h3>
-              <h6>{{formatCurrency(credit.rangeComplete.tilgung)}}</h6>
-            </div>
-            <div class="table-cell p-1">
-              <h3>Raten</h3>
-              <h6>{{formatCurrency(credit.rangeComplete.rate)}}</h6>
-            </div>
-          </div>
+          <tablerow
+            :items="[
+{titel:'Zinsen',value: formatCurrency(credit.rangeComplete.zinsen)},
+{titel:'Tilgung',value: formatCurrency(credit.rangeComplete.tilgung)},
+{titel:'Raten',value: formatCurrency(credit.rangeComplete.rate)}
+]"
+          ></tablerow>
         </div>
       </div>
     </div>
-
     <div class="sticky bottom">
       <router-link class="fab bg-grey-deep-dark pull-right shadow" to="/settings">S</router-link>
     </div>
@@ -158,9 +126,13 @@
 </template>
 
 <script>
+import tablerow from "@/components/tablerow.vue";
+
 export default {
   name: "app",
-
+  components: {
+    tablerow
+  },
   data: function() {
     return {
       grapth: {
