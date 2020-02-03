@@ -6,7 +6,6 @@ module.exports = {
     theme_color: "#dbdbde",
     background_color: "#dbdbde",
     appleMobileWebAppCapable: 'yes',
-    appleMobileWebAppStatusBarStyle: 'black',
+    appleMobileWebAppStatusBarStyle: 'white',
   }
-
 };

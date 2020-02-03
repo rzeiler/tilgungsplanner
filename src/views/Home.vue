@@ -1,11 +1,14 @@
 <template>
-  <div id="app" class="p-1">
+  <div>
     <div class="bg-grey-deep-dark rounded shadow sticky head">
-      <div class="p-1">
+      <div class="p-1 text-center">
         <br />
-        <p
-          class="text-justify"
-        >{{formatPercent(credit.zinsen)}} Zinsen / {{formatPercent(credit.tilgung)}} Tilgung</p>
+        <h1>Tilgungsplanner</h1>
+        <br />
+        <small class="text-justify">
+          {{formatPercent(credit.zinsen)}} Zinsen
+          / {{formatPercent(credit.tilgung)}} Tilgung
+        </small>
         <br />
         <h1>
           323.000,00€
@@ -14,7 +17,7 @@
         <br />
       </div>
     </div>
-    <div class="p-1">
+    <div class="p-1 not-mobile">
       <div class="bg-white rounded shadow">
         <br />
         <br />
@@ -66,26 +69,29 @@
         preserveAspectRatio="none"
       >
         <g transform="translate(10,5)">
-          <polyline
+          <path
+            d="m 0,0 0,110"
             fill="none"
             stroke-linecap="round"
-            :stroke="this.grapth.a.color"
-            stroke-width="5"
-            :points="grapth.a.points.join(' ')"
+            stroke="#00000066"
+            stroke-width=".6"
+          />
+          <path
+            d="m 0,110 100,0"
+            fill="none"
+            stroke-linecap="round"
+            stroke="#00000066"
+            stroke-width="1"
           />
           <polyline
+            class="path"
+            v-for="(g,i) in grapth"
+            :key="i"
             fill="none"
             stroke-linecap="round"
-            :stroke="this.grapth.b.color"
-            stroke-width="3"
-            :points="grapth.b.points.join(' ')"
-          />
-          <polyline
-            fill="none"
-            stroke-linecap="round"
-            :stroke="this.grapth.c.color"
-            stroke-width="3"
-            :points="grapth.c.points.join(' ')"
+            :stroke="g.color"
+            stroke-width="2"
+            :points="g.points.join(' ')"
           />
         </g>
       </svg>
