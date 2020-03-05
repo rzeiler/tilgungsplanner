@@ -2,21 +2,6 @@
   <div class="about">
     <router-link class="fab bg-grey-deep-dark pull-right shadow" to="/">OK</router-link>
     <h1>Einstellungen</h1>
-
-    <div class="table-row dark">
-      <div class="table-cell">
-        <label>
-          <span>Kaufpreis</span>
-          <input type="number" v-model="kaufpreis" placeholder="Kaufpreis" />
-        </label>
-      </div>
-      <div class="table-cell">
-        <label>
-          <span>Eigenkapital</span>
-          <input type="number" v-model="eigenkapital" placeholder="Eigenkapital" />
-        </label>
-      </div>
-    </div>
     <div class="table-row dark">
       <div class="table-cell">
         <label>
@@ -63,8 +48,6 @@ export default {
 
   data: function() {
     return {
-      kaufpreis: 500000,
-      eigenkapital: 10000,
       darlehen: 500000,
       zinsen: 2,
       tilgung: 2,
@@ -73,10 +56,9 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.kaufpreis) this.kaufpreis = localStorage.kaufpreis;
+    
     if (localStorage.darlehen) this.darlehen = localStorage.darlehen;
-    if (localStorage.eigenkapital)
-      this.eigenkapital = localStorage.eigenkapital;
+    
     if (localStorage.zinsen) this.zinsen = localStorage.zinsen;
     if (localStorage.tilgung) this.tilgung = localStorage.tilgung;
     if (localStorage.sondertilgung)

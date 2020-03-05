@@ -31,13 +31,13 @@
             >{{formatCurrency(credit.sondertilgung)}} Sondertilgung</small>
           </h3>
           <br />
-          <h6>Gesamtlaufzeit {{credit.yearCount}} Jahre</h6>
+          <h6>Gesamtlaufzeit {{credit.gesamtjahre}} Jahre</h6>
           <tablerow
             cssClass="b-t-b m-3"
             :items="[
 {titel:'Monat',value: credit.range.count},
 {titel:'Rate',value: formatCurrency(credit.rate)},
-{titel:'Restschuld',value: formatCurrency(credit.range.open)}
+{titel:'Restschuld',value: formatCurrency(credit.open)}
 ]"
           ></tablerow>
           <div class="rounded bg-grey-light m-3 shadow">
@@ -108,18 +108,18 @@
         <div class="p-1">
           <div class="table-row">
             <div class="table-cell p-1 w-auto">
-              <h1 class="fab accent">{{credit.yearCount.toFixed(0)}}</h1>
+              <h1 class="fab accent">{{credit.gesamtjahre.toFixed(0)}}</h1>
             </div>
             <div class="table-cell p-1">
-              <h2>Gezahlt in der Laufzeit von {{credit.yearCount}} Jahren.</h2>
-              <h3>Gesamtausgaben: {{formatCurrency(credit.rangeComplete.rate)}}</h3>
+              <h2>Gezahlt in der Laufzeit von {{credit.gesamtjahre}} Jahren.</h2>
+              <h3>Gesamtausgaben: {{formatCurrency(credit.gesamtraten)}}</h3>
             </div>
           </div>
           <tablerow
             :items="[
-{titel:'Zinsen',value: formatCurrency(credit.rangeComplete.zinsen)},
-{titel:'Tilgung',value: formatCurrency(credit.rangeComplete.tilgung)},
-{titel:'Raten',value: formatCurrency(credit.rangeComplete.rate)}
+{titel:'Zinsen',value: formatCurrency(credit.gesamtzinsen)},
+{titel:'Tilgung',value: formatCurrency(credit.gesamttilgungen)},
+{titel:'Raten',value: formatCurrency(credit.gesamtraten)}
 ]"
           ></tablerow>
         </div>
@@ -165,19 +165,12 @@ export default {
         darlehen: 500000,
         zinsen: 2,
         tilgung: 2,
-        rate: 0,
-        gezahlt: 0,
-        offen: 0,
-        yearCount: 0,
-        monthCount: 0,
+        open: 0,
+        gesamtjahre: 0,
+        gesamtmonate: 0,
         sondertilgung: 0,
         data: [],
         range: {
-          zinsen: 0,
-          tilgung: 0,
-          rate: 0
-        },
-        rangeComplete: {
           zinsen: 0,
           tilgung: 0,
           rate: 0
@@ -207,17 +200,9 @@ export default {
 
     let firstTilgung = this.credit.data[0].tilgung;
     let firstZinsen = this.credit.data[0].zinsen;
-
     let twentyYears = this.credit.data;
+
     twentyYears.map((val, i) => {
-      if (i <= 240) {
-        this.credit.range.zinsen += val.zinsen;
-        this.credit.range.tilgung += val.tilgung;
-        this.credit.range.rate += val.rate;
-      }
-      this.credit.rangeComplete.zinsen += val.zinsen;
-      this.credit.rangeComplete.tilgung += val.tilgung;
-      this.credit.rangeComplete.rate += val.rate;
 
       let y = 100 - (val.darlehen * 100) / this.credit.darlehen;
       let x = (i * 100) / twentyYears.length;
@@ -233,15 +218,15 @@ export default {
     });
 
     this.grapth.a.from = this.credit.data[0].darlehen;
-    this.grapth.a.to = this.credit.data[this.credit.monthCount - 1].darlehen;
+    this.grapth.a.to = this.credit.data[this.credit.gesamtmonate - 1].darlehen;
 
     this.grapth.b.from = this.credit.data[0].tilgung;
-    this.grapth.b.to = this.credit.data[this.credit.monthCount - 1].tilgung;
+    this.grapth.b.to = this.credit.data[this.credit.gesamtmonate - 1].tilgung;
 
     this.grapth.c.from = this.credit.data[0].zinsen;
-    this.grapth.c.to = this.credit.data[this.credit.monthCount - 1].zinsen;
+    this.grapth.c.to = this.credit.data[this.credit.gesamtmonate - 1].zinsen;
 
-    this.credit.range.open = this.credit.darlehen - this.credit.range.rate;
+     
   },
 
   methods: {
@@ -253,9 +238,10 @@ export default {
         rate: 0,
         gezahlt: 0,
         offen: 0,
-        yearCount: 0,
-        monthCount: 0,
+        gesamtjahre: 0,
+        gesamtmonate: 0,
         sondertilgung: 0,
+        gesamttilgung: 0,
         data: [],
         range: {
           zinsen: 0,
@@ -263,11 +249,6 @@ export default {
           rate: 0,
           open: 0,
           count: 240
-        },
-        rangeComplete: {
-          zinsen: 0,
-          tilgung: 0,
-          rate: 0
         }
       };
       let list = [];
@@ -282,6 +263,11 @@ export default {
       credit.darlehen = currentDarlehen;
       credit.zinsen = currentZinsen;
       credit.tilgung = currentTilgung;
+      credit.gesamttilgungen = 0;
+      credit.gesamtraten = 0;
+      credit.gesamtzinsen = 0;
+
+      let startDate = new Date();
 
       do {
         let row = {};
@@ -292,6 +278,10 @@ export default {
         row.tilgung = 0;
         row.rate = 0;
         row.year = null;
+        row.gesamttilgung = 0;
+        row.gesamtraten = 0;
+        row.gesamtzinsen = 0;
+        row.date = new Date(startDate.setMonth(startDate.getMonth() + 1));
 
         if (currentDarlehen == allDarlehen) {
           row.zinsen = (currentDarlehen * (currentZinsen / 100)) / 12;
@@ -305,17 +295,34 @@ export default {
           row.tilgung = row.rate - row.zinsen;
         }
 
+        credit.gesamttilgungen += row.tilgung;
+        credit.gesamtraten += row.rate;
+        credit.gesamtzinsen += row.zinsen;
+
         if (list.length % 12 == 0) {
           row.year = list.length / 12 + 1;
           row.sondertilgung = currentSondertilgung;
         }
 
+        row.gesamttilgungen =  credit.gesamttilgungen;
+        row.gesamtraten = credit.gesamtraten;
+        row.gesamtzinsen = credit.gesamtzinsen;
+
         currentDarlehen = currentDarlehen - (row.tilgung + row.sondertilgung);
+
         list.push(row);
       } while (currentDarlehen > 0);
 
-      credit.yearCount = parseFloat((list.length / 12).toFixed(1));
-      credit.monthCount = list.length;
+      credit.rate = list[239].tilgung;
+      credit.open = list[240].darlehen;
+
+      credit.range.zinsen = list[239].gesamtzinsen;
+      credit.range.tilgung = list[239].gesamttilgungen;
+      credit.range.rate = list[239].gesamtraten;
+
+      //console.log(list);
+      credit.gesamtjahre = parseFloat((list.length / 12).toFixed(1));
+      credit.gesamtmonate = list.length;
       credit.data = list;
 
       return credit;

@@ -14,7 +14,6 @@ body
   @media (max-width: $contentWidth)
     font-size 22px
 
-
 *
   z-index 1
   text-decoration none
@@ -61,6 +60,8 @@ small
   width 100%
   max-width 600px
   margin auto
+  &>div
+    padding 10px
 
 .table-row
     width 100%
@@ -188,3 +189,22 @@ a
   to
     stroke-dashoffset: 0;
 
+
+/* width */
+::-webkit-scrollbar 
+  width: 10px
+
+/* Track */
+::-webkit-scrollbar-track 
+  background rgba(255, 255, 255, 0.3)
+
+::-webkit-scrollbar-track:hover 
+  background rgba(255, 255, 255, 0.4)
+
+/* Handle */
+::-webkit-scrollbar-thumb 
+  background #888
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover 
+  background #999
